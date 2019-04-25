@@ -21,3 +21,4 @@ export * from './apply-record.repository';
 export * from './channel-daily-stat.repository';
 export * from './daily-stat.repository';
 export * from './product-daily-stat.repository';
+export * from './other-user.repository';

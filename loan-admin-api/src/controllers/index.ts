@@ -18,3 +18,4 @@ export * from './apply-record.controller';
 export * from './daily-stat.controller';
 export * from './channel-daily-stat.controller';
 export * from './product-daily-stat.controller';
+export * from './other-user.controller';

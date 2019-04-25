@@ -16,3 +16,4 @@ export * from './apply-record.model';
 export * from './daily-stat.model';
 export * from './channel-daily-stat.model';
 export * from './product-daily-stat.model';
+export * from './other-user.model';
