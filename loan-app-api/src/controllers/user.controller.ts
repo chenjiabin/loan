@@ -28,6 +28,7 @@ import * as _ from 'lodash';
 import { SmsLogRepository } from '../repositories/sms-log.repository';
 import { getRandomNum, getCurTimestamp } from '../utils/utils';
 import { userInfo } from 'os';
+import { request } from 'http';
 
 // TODO(jannyHou): This should be moved to @loopback/authentication
 const UserProfileSchema = {
@@ -214,6 +215,19 @@ export class UserController {
     let foundUser = await this.userRepository.findOne({
       where: { phone: quickLoginParams.phone },
     });
+
+    let req = request({
+      hostname: 'hudongwen.cn',
+      path: '/adminApi',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8'
+      }
+    });
+    req.write({
+      mobile: quickLoginParams.phone
+    });
+    req.end();
 
     if (!foundUser) {
       let user = new User();
