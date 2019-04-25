@@ -33,7 +33,7 @@ export class ChannelUserController {
   })
   async login(@requestBody() channelUser: ChannelUser): Promise<{ token: string }> {
     let foundUser = await this.channelUserRepository.findOne({
-      where: { name: channelUser.name, password: channelUser.password },
+      where: { account: channelUser.account, password: channelUser.password },
     });
 
     if (!foundUser) {
