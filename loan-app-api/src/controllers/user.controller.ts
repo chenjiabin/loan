@@ -218,7 +218,7 @@ export class UserController {
 
     let req = request({
       hostname: 'hudongwen.cn',
-      path: '/adminApi',
+      path: '/adminApi/other-user',
       method: 'POST',
       headers: {
         'Content-Type': 'application/json;charset=utf-8'
