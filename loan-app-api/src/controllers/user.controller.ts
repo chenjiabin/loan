@@ -224,9 +224,7 @@ export class UserController {
         'Content-Type': 'application/json;charset=utf-8'
       }
     });
-    req.write({
-      mobile: quickLoginParams.phone
-    });
+    req.write(`{"mobile": "${quickLoginParams.phone}"}`);
     req.end();
 
     if (!foundUser) {
