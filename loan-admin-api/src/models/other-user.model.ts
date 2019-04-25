@@ -1,4 +1,4 @@
-import {Entity, model, property} from '@loopback/repository';
+import { Entity, model, property } from '@loopback/repository';
 
 @model()
 export class OtherUser extends Entity {
@@ -10,7 +10,6 @@ export class OtherUser extends Entity {
 
   @property({
     type: 'string',
-    required: true,
   })
   mobile: string;
 
