@@ -192,7 +192,7 @@ export class ChannelUserController {
       whereTime = `createTime>=${startTime} and createTime<${endTime} and `
     }
 
-    return await this.userRepository.dataSource.execute(`
+    let result = await this.userRepository.dataSource.execute(`
       SELECT
         COUNT(id) AS regCnt,
         SUM(if(status=1,1,0)) AS activeCnt,
@@ -204,5 +204,10 @@ export class ChannelUserController {
       GROUP BY
         date
     `)
+
+    let channel = await this.channelUserRepository.findById(id);
+    for (var i = 0; i < result.length; i++) {
+      result.activeCnt = result.regCnt * channel.activeProp1 + result.activeCnt * channel.activeProp2;
+    }
   }
 }
