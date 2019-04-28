@@ -209,5 +209,7 @@ export class ChannelUserController {
     for (var i = 0; i < result.length; i++) {
       result.activeCnt = result.regCnt * channel.activeProp1 + result.activeCnt * channel.activeProp2;
     }
+
+    return result;
   }
 }
