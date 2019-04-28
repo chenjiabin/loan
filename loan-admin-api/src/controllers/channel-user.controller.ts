@@ -192,7 +192,7 @@ export class ChannelUserController {
       whereTime = `createTime>=${startTime} and createTime<${endTime} and `
     }
 
-    let result = await this.userRepository.dataSource.execute(`
+    let result = await this.channelUserRepository.dataSource.execute(`
       SELECT
         COUNT(id) AS regCnt,
         SUM(if(status=1,1,0)) AS activeCnt,
