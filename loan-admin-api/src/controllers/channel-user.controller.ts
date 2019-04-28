@@ -207,7 +207,7 @@ export class ChannelUserController {
 
     let channel = await this.channelUserRepository.findById(id);
     for (var i = 0; i < result.length; i++) {
-      result.activeCnt = result.activeCnt * channel.activeProp1 + (result.regCnt - result.activeCnt) * channel.activeProp2;
+      result[i].activeCnt = result[i].activeCnt * channel.activeProp1 + (result[i].regCnt - result[i].activeCnt) * channel.activeProp2;
     }
 
     return result;
