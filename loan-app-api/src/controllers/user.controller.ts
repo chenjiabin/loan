@@ -232,13 +232,17 @@ export class UserController {
       user.phone = quickLoginParams.phone;
       user.password = await this.passwordHahser.hashPassword('123456');
       user.nick = "用户" + getRandomNum(1000000, 9999999);
-      let channel = await this.channelUserRepo.findOne({ where: { name: quickLoginParams.channel } })
-      let channelId = 0
+      let channel = await this.channelUserRepo.findOne({ where: { name: quickLoginParams.channel } });
+      let channelId = 0;
       if (channel) {
-        channelId = channel.id || 0
+        channelId = channel.id || 0;
       }
-      user.channelId = channelId
-      user.createTime = getCurTimestamp()
+      user.channelId = channelId;
+
+      let curTs = getCurTimestamp();
+      user.status = UserStatus.Active;
+      user.activeTime = curTs;
+      user.createTime = curTs;
 
       // Save & Return Result
       foundUser = await this.userRepository.create(user);

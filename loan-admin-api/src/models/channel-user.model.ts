@@ -32,6 +32,16 @@ export class ChannelUser extends Entity {
   @property({
     type: 'number',
   })
+  activeProp1: number;
+
+  @property({
+    type: 'number',
+  })
+  activeProp2: number;
+
+  @property({
+    type: 'number',
+  })
   status?: number;
 
   @property({
