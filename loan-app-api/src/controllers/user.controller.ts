@@ -66,44 +66,6 @@ export class UserController {
     public jwtAuthenticationService: JWTAuthenticationService,
   ) { }
 
-  @post('/users/reg')
-  async create(
-    @requestBody() regParams: RegParams,
-  ): Promise<{ user: User; token: string }> {
-    validateCredentials(_.pick(regParams, ['phone', 'password']));
-    // 检查验证码是否正确
-    let smsLog = await this.smsLogRepo.findOne({
-      where: { phone: regParams.phone },
-      order: ['id DESC'],
-    });
-
-    if (smsLog == null || smsLog.code != regParams.code) {
-      throw new HttpErrors.UnprocessableEntity('验证码错误');
-    }
-
-    let foundUser = await this.userRepository.findOne({
-      where: { phone: regParams.phone },
-    });
-
-    if (foundUser) {
-      throw new HttpErrors.UnprocessableEntity('您已经注册过了');
-    }
-
-    let user = new User();
-    user.phone = regParams.phone;
-    user.password = await this.passwordHahser.hashPassword(regParams.password);
-    user.nick = regParams.phone;
-    // Save & Return Result
-    let savedUser = await this.userRepository.create(user);
-
-    delete savedUser.password;
-    // Get token
-    const token = await this.jwtAuthenticationService.getAccessTokenForUser(
-      user,
-    );
-    return { user: savedUser, token: token };
-  }
-
   @get('/users/{userId}', {
     responses: {
       '200': {
@@ -216,17 +178,6 @@ export class UserController {
       where: { phone: quickLoginParams.phone },
     });
 
-    let req = request({
-      hostname: 'hudongwen.cn',
-      path: '/adminApi/other-users',
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json;charset=utf-8'
-      }
-    });
-    req.write(`{"mobile": "${quickLoginParams.phone}"}`);
-    req.end();
-
     if (!foundUser) {
       let user = new User();
       user.phone = quickLoginParams.phone;
@@ -259,5 +210,67 @@ export class UserController {
       false,
     );
     return { user: foundUser, token: token };
+  }
+
+  @post('/users/reg', {
+    responses: {
+      '200': {
+        description: 'Token',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                token: {
+                  type: 'string',
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  })
+  async register(
+    @requestBody() quickLoginParams: QuickLoginParams,
+  ): Promise<{ code: number }> {
+    // 检查验证码是否正确
+    let smsLog = await this.smsLogRepo.findOne({
+      where: { phone: quickLoginParams.phone },
+      order: ['id DESC'],
+    });
+
+    console.log(quickLoginParams);
+    if (smsLog == null || smsLog.code != quickLoginParams.code) {
+      console.log(smsLog);
+      throw new HttpErrors.UnprocessableEntity('验证码错误');
+    }
+
+    let foundUser = await this.userRepository.findOne({
+      where: { phone: quickLoginParams.phone },
+    });
+
+    if (!foundUser) {
+      let user = new User();
+      user.phone = quickLoginParams.phone;
+      user.password = await this.passwordHahser.hashPassword('123456');
+      user.nick = "用户" + getRandomNum(1000000, 9999999);
+      let channel = await this.channelUserRepo.findOne({ where: { name: quickLoginParams.channel } });
+      let channelId = 0;
+      if (channel) {
+        channelId = channel.id || 0;
+      }
+      user.channelId = channelId;
+
+      let curTs = getCurTimestamp();
+      user.createTime = curTs;
+
+      // Save & Return Result
+      foundUser = await this.userRepository.create(user);
+    } else {
+      return { code: 201 }
+    }
+
+    return { code: 200 };
   }
 }
