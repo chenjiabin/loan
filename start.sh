@@ -1,17 +1,17 @@
 pm2 list
 
 cd loan-admin-api
-cnpm install
+npm install
 pm2 start npm --kill-timeout 15000 --name admin-api -- run start
 cd -
 
 cd loan-app-api
-cnpm install
+npm install
 pm2 start npm --kill-timeout 15000 --name app-api -- run start
 cd -
 
 cd loan-sub-admin-api
-cnpm install
+npm install
 pm2 start npm --kill-timeout 15000 --name sub-admin-api -- run start
 cd -
 
