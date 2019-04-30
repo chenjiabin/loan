@@ -70,7 +70,17 @@ export class ConfigControllerController {
   async find(
     @param.query.object('filter', getFilterSchemaFor(Config)) filter?: Filter,
   ): Promise<Config[]> {
-    return await this.configRepository.find(filter);
+    let filterx = {
+      where: {
+        and: [
+          {key: {nlike: 'AccessKey%'}}, 
+          {key: {neq: 'SignName'}}, 
+          {key: {neq: 'TempCode'}}
+        ]
+      }
+    };
+    Object.assign(filterx, filter);
+    return await this.configRepository.find(filterx);
   }
 
   @patch('/configs', {
