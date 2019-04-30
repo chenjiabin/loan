@@ -20,6 +20,7 @@ import { ChannelUser, User } from '../models';
 import { ChannelUserRepository, UserRepository } from '../repositories';
 import { getCurTimestamp } from '../utils/utils';
 import { authenticate } from '@loopback/authentication';
+import * as configs from '../configs/configs.json'
 
 export class ChannelUserController {
   constructor(
@@ -40,7 +41,7 @@ export class ChannelUserController {
   @authenticate('jwt')
   async create(@requestBody() channelUser: ChannelUser): Promise<ChannelUser> {
     channelUser.createTime = getCurTimestamp()
-    channelUser.linkDesc = "H5推广：http://hudongwen.cn/h5?from=" + channelUser.name;
+    channelUser.linkDesc = `H5推广：${configs.host}h5?from=${channelUser.name}`;
     return await this.channelUserRepository.create(channelUser);
   }
 
