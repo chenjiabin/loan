@@ -41,7 +41,7 @@ export class ChannelUserController {
   @authenticate('jwt')
   async create(@requestBody() channelUser: ChannelUser): Promise<ChannelUser> {
     channelUser.createTime = getCurTimestamp()
-    channelUser.linkDesc = `H5推广：${configs.host}h5?from=${channelUser.name}`;
+    channelUser.linkDesc = `H5推广：${configs.host}h5/#/?from=${channelUser.name}`;
     return await this.channelUserRepository.create(channelUser);
   }
 
