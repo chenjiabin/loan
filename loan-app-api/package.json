@@ -1,5 +1,5 @@
 {
-  "name": "@loopback/example-shopping",
+  "name": "loan-app-api",
   "version": "1.0.0",
   "description": "LoopBack 4 Example: Online Shopping APIs",
   "keywords": [
