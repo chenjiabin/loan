@@ -109,7 +109,7 @@ export class ChannelUserController {
 
     let channel = await this.channelUserRepository.findById(id);
     for (var i = 0; i < result.length; i++) {
-      if (result[i].regCnt <= 5) {
+      if (result[i].regCnt <= 10) {
         continue
       }
       let activeRate = result[i].activeCnt * 1.0 / result[i].regCnt
