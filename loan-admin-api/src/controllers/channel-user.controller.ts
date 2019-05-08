@@ -208,8 +208,19 @@ export class ChannelUserController {
 
     let channel = await this.channelUserRepository.findById(id);
     for (var i = 0; i < result.length; i++) {
-      result[i].activeCnt = result[i].activeCnt * channel.activeProp1 + (result[i].regCnt - result[i].activeCnt) * channel.activeProp2;
+      if (result[i].regCnt <= 5) {
+        continue
+      }
+      let activeRate = result[i].activeCnt * 1.0 / result[i].regCnt
+      console.log(activeRate, result[i].activeCnt, result[i].regCnt, channel.activeProp1, channel.activeProp2)
+      result[i].regCnt = result[i].activeCnt * channel.activeProp1 + (result[i].regCnt - result[i].activeCnt) * channel.activeProp2;
+      console.log(result[i].regCnt)
+      result[i].activeCnt = result[i].regCnt * activeRate;
+      console.log(result[i].activeCnt)
+      result[i].regCnt = ~~result[i].regCnt;
+      console.log(result[i].regCnt)
       result[i].activeCnt = ~~result[i].activeCnt;
+      console.log(result[i].activeCnt)
     }
 
     return result;
