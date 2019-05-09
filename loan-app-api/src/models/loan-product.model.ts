@@ -102,6 +102,12 @@ export class LoanProduct extends Entity {
   top?: boolean;
 
   @property({
+    type: 'boolean',
+    default: false,
+  })
+  online?: boolean;
+
+  @property({
     type: 'string',
   })
   url?: string;
