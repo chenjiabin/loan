@@ -37,18 +37,18 @@ export async function sendSms(configs: any, phone: string, code: string) {
   }
 }
 
-export function getClientIp(req: Request): string {
-  let addr = req.headers.get('X-Real-IP');
-  if (addr) {
-    return addr;
-  }
+// export function getClientIp(req: Request): string {
+//   let addr = req.headers.get('X-Real-IP');
+//   if (addr) {
+//     return addr;
+//   }
 
-  let addrsStr = req.headers.get('X-Forwarded-For');
-  if (addrsStr) {
-    let addrs = addrsStr.split(',');
-    if (addrs.length > 0) {
-      return addrs[0];
-    }
-  }
-  return '';
-}
+//   let addrsStr = req.headers.get('X-Forwarded-For');
+//   if (addrsStr) {
+//     let addrs = addrsStr.split(',');
+//     if (addrs.length > 0) {
+//       return addrs[0];
+//     }
+//   }
+//   return '';
+// }

@@ -27,7 +27,7 @@ import { validateCredentials } from '../services/JWT.authentication.service';
 import * as _ from 'lodash';
 import { SmsLogRepository } from '../repositories/sms-log.repository';
 import { getRandomNum, getCurTimestamp, getClientIp } from '../utils/utils';
-import { RestBindings } from '@loopback/rest';
+import { RestBindings, Request } from '@loopback/rest';
 
 // TODO(jannyHou): This should be moved to @loopback/authentication
 const UserProfileSchema = {
@@ -266,9 +266,8 @@ export class UserController {
       let curTs = getCurTimestamp();
       user.createTime = curTs;
 
-      let ip = getClientIp(this.req);
-      console.log(ip);
-      user.ip = ip;
+      console.log(this.req.ip);
+      user.ip = this.req.ip;
 
       // Save & Return Result
       foundUser = await this.userRepository.create(user);
