@@ -13,6 +13,7 @@ export async function main(options?: ApplicationConfig) {
 
   await app.boot();
   await app.start();
+  app.set('trust proxy', 'loopback');
   // app.models.Todo.definition.rawProperties.createTime.default =
   //   app.models.Todo.definition.properties.createTime.default = function () {
   //     return getCurTimestamp();
