@@ -199,7 +199,7 @@ export class LoanProductController {
     let result = [{ count: 0 }]
     result = await this.loanProductRepository.dataSource.execute(`
       SELECT
-        COUNT(DISTINCT(ApplyRecord.userId)),
+        COUNT(DISTINCT(ApplyRecord.userId)) AS count
       FROM
         ApplyRecord
         INNER JOIN User On User.id = ApplyRecord.userId
