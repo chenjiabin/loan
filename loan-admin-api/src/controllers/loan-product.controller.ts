@@ -171,23 +171,17 @@ export class LoanProductController {
 
     return await this.loanProductRepository.dataSource.execute(`
       SELECT
-        User.id AS id,
-        phone,
+        DISTINCT(ApplyRecord.userId) AS uid,
+        User.phone AS phone,
         ChannelUser.name AS channelName,
         User.createTime AS createTime,
-        ip
+        User.ip AS ip
       FROM
-        User
+        ApplyRecord
+        INNER JOIN User On User.id = ApplyRecord.userId
         LEFT JOIN ChannelUser ON User.channelId = ChannelUser.id
       WHERE
-        User.id IN (
-          SELECT
-            DISTINCT(userId)
-          FROM
-            ApplyRecord
-          WHERE
-            loanProductId = ${id}
-        )
+        ApplyRecord.loanProductId = ${id}
       LIMIT ${(page - 1) * limit}, ${limit}
     `);
   }
@@ -205,11 +199,12 @@ export class LoanProductController {
     let result = [{ count: 0 }]
     result = await this.loanProductRepository.dataSource.execute(`
       SELECT
-        COUNT(DISTINCT(userId)) AS count
+        COUNT(DISTINCT(ApplyRecord.userId)),
       FROM
         ApplyRecord
+        INNER JOIN User On User.id = ApplyRecord.userId
       WHERE
-        loanProductId = ${id}
+        ApplyRecord.loanProductId = ${id}
     `);
 
     if (!result || result.length == 0) {
