@@ -26,7 +26,7 @@ import { JWTAuthenticationBindings, PasswordHasherBindings } from '../keys';
 import { validateCredentials } from '../services/JWT.authentication.service';
 import * as _ from 'lodash';
 import { SmsLogRepository } from '../repositories/sms-log.repository';
-import { getRandomNum, getCurTimestamp, getClientIp } from '../utils/utils';
+import { getRandomNum, getCurTimestamp } from '../utils/utils';
 import { RestBindings, Request } from '@loopback/rest';
 
 // TODO(jannyHou): This should be moved to @loopback/authentication
