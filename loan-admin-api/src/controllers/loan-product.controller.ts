@@ -19,6 +19,7 @@ import {
 import { LoanProduct } from '../models';
 import { LoanProductRepository } from '../repositories';
 import { getCurTimestamp } from '../utils/utils';
+import { authenticate } from '@loopback/authentication';
 
 export class LoanProductController {
   constructor(
@@ -34,6 +35,7 @@ export class LoanProductController {
       },
     },
   })
+  @authenticate('jwt')
   async create(@requestBody() loanProduct: LoanProduct): Promise<LoanProduct> {
     loanProduct.createTime = getCurTimestamp()
     return await this.loanProductRepository.create(loanProduct);
@@ -47,6 +49,7 @@ export class LoanProductController {
       },
     },
   })
+  @authenticate('jwt')
   async count(
     @param.query.object('where', getWhereSchemaFor(LoanProduct)) where?: Where,
   ): Promise<Count> {
@@ -65,6 +68,7 @@ export class LoanProductController {
       },
     },
   })
+  @authenticate('jwt')
   async find(
     @param.query.object('filter', getFilterSchemaFor(LoanProduct))
     filter?: Filter,
@@ -80,6 +84,7 @@ export class LoanProductController {
       },
     },
   })
+  @authenticate('jwt')
   async updateAll(
     @requestBody() loanProduct: LoanProduct,
     @param.query.object('where', getWhereSchemaFor(LoanProduct)) where?: Where,
@@ -95,6 +100,7 @@ export class LoanProductController {
       },
     },
   })
+  @authenticate('jwt')
   async findById(@param.path.number('id') id: number): Promise<LoanProduct> {
     return await this.loanProductRepository.findById(id);
   }
@@ -106,6 +112,7 @@ export class LoanProductController {
       },
     },
   })
+  @authenticate('jwt')
   async updateById(
     @param.path.number('id') id: number,
     @requestBody() loanProduct: LoanProduct,
@@ -120,6 +127,7 @@ export class LoanProductController {
       },
     },
   })
+  @authenticate('jwt')
   async replaceById(
     @param.path.number('id') id: number,
     @requestBody() loanProduct: LoanProduct,
@@ -134,7 +142,60 @@ export class LoanProductController {
       },
     },
   })
+  @authenticate('jwt')
   async deleteById(@param.path.number('id') id: number): Promise<void> {
     await this.loanProductRepository.deleteById(id);
+  }
+
+  @get('/loanProducts/{id}/recordInfo', {
+    responses: {
+      '200': {
+        description: '该产品下用户申请记录',
+        content: { 'application/json': { schema: { 'x-ts-type': {} } } },
+      },
+    },
+  })
+  @authenticate('jwt')
+  async findRecordInfoById(@param.path.number('id') id: number): Promise<any> {
+    return await this.loanProductRepository.dataSource.execute(`
+      SELECT
+        User.id AS id,
+        phone,
+        ChannelUser.name AS channelName,
+        User.createTime AS createTime,
+        ip
+      FROM
+        User
+        LEFT JOIN ChannelUser ON User.channelId = ChannelUser.id
+      WHERE
+        User.id IN (
+          SELECT
+            DISTINCT(userId)
+          FROM
+            ApplyRecord
+          WHERE
+            loanProductId = ${id}
+        )
+    `);
+  }
+
+  @get('/loanProducts/{id}/recordInfo/count', {
+    responses: {
+      '200': {
+        description: '该产品下用户申请记录总数',
+        content: { 'application/json': { schema: { 'x-ts-type': {} } } },
+      },
+    },
+  })
+  @authenticate('jwt')
+  async findRecordInfoCountById(@param.path.number('id') id: number): Promise<any> {
+    return await this.loanProductRepository.dataSource.execute(`
+      SELECT
+        COUNT(DISTINCT(userId)) AS count
+      FROM
+        ApplyRecord
+      WHERE
+        loanProductId = ${id}
+    `);
   }
 }
