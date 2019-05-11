@@ -267,10 +267,16 @@ export class UserController {
       user.createTime = curTs;
 
       let ip = '';
-      if (this.req.ips.length > 0) {
-        ip = this.req.ips[0]
+      // if (this.req.ips.length > 0) {
+      //   ip = this.req.ips[0]
+      // }
+      let addrsStr = this.req.header('X-Forwarded-For');
+      if (addrsStr) {
+        let addrs = addrsStr.split(',');
+        if (addrs.length > 0) {
+          ip = addrs[0];
+        }
       }
-      console.log(this.req.ip, this.req.ips, this.req.header('X-Forwarded-For'));
       user.ip = ip;
 
       // Save & Return Result
