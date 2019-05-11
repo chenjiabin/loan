@@ -73,6 +73,11 @@ export class User extends Entity {
   })
   createTime?: number;
 
+  @property({
+    type: 'string',
+  })
+  ip?: string;
+
   constructor(data?: Partial<User>) {
     super(data);
   }

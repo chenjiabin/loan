@@ -26,9 +26,8 @@ import { JWTAuthenticationBindings, PasswordHasherBindings } from '../keys';
 import { validateCredentials } from '../services/JWT.authentication.service';
 import * as _ from 'lodash';
 import { SmsLogRepository } from '../repositories/sms-log.repository';
-import { getRandomNum, getCurTimestamp } from '../utils/utils';
-import { userInfo } from 'os';
-import { request } from 'http';
+import { getRandomNum, getCurTimestamp, getClientIp } from '../utils/utils';
+import { RestBindings } from '@loopback/rest';
 
 // TODO(jannyHou): This should be moved to @loopback/authentication
 const UserProfileSchema = {
@@ -64,6 +63,8 @@ export class UserController {
     public passwordHahser: PasswordHasher,
     @inject(JWTAuthenticationBindings.SERVICE)
     public jwtAuthenticationService: JWTAuthenticationService,
+    @inject(RestBindings.Http.REQUEST)
+    public req: Request
   ) { }
 
   @get('/users/{userId}', {
@@ -264,6 +265,10 @@ export class UserController {
 
       let curTs = getCurTimestamp();
       user.createTime = curTs;
+
+      let ip = getClientIp(this.req);
+      console.log(ip);
+      user.ip = ip;
 
       // Save & Return Result
       foundUser = await this.userRepository.create(user);
