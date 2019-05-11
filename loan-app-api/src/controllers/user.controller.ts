@@ -270,7 +270,7 @@ export class UserController {
       if (this.req.ips.length > 0) {
         ip = this.req.ips[0]
       }
-      console.log(this.req.ip, this.req.ips);
+      console.log(this.req.ip, this.req.ips, this.req.header('X-Forwarded-For'));
       user.ip = ip;
 
       // Save & Return Result
