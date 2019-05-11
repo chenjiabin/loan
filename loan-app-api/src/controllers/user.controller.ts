@@ -266,8 +266,12 @@ export class UserController {
       let curTs = getCurTimestamp();
       user.createTime = curTs;
 
-      console.log(this.req.ip);
-      user.ip = this.req.ip;
+      let ip = '';
+      if (this.req.ips.length > 0) {
+        ip = this.req.ips[0]
+      }
+      console.log(this.req.ip, this.req.ips);
+      user.ip = ip;
 
       // Save & Return Result
       foundUser = await this.userRepository.create(user);
