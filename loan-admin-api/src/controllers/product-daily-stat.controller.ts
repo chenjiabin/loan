@@ -106,6 +106,9 @@ export class ProductDailyStatController {
         dateTime DESC
     `)
 
+    if (!result || result.length == 0) {
+      return { count: 0 }
+    }
     return result[0]
   }
 

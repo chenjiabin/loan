@@ -156,7 +156,19 @@ export class LoanProductController {
     },
   })
   @authenticate('jwt')
-  async findRecordInfoById(@param.path.number('id') id: number): Promise<any> {
+  async findRecordInfoById(
+    @param.path.number('id') id: number,
+    @param.query.string('page') page: number,
+    @param.query.string('limit') limit: number,
+  ): Promise<any> {
+    if (!page) {
+      page = 1
+    }
+
+    if (!limit) {
+      limit = 20
+    }
+
     return await this.loanProductRepository.dataSource.execute(`
       SELECT
         User.id AS id,
@@ -176,6 +188,7 @@ export class LoanProductController {
           WHERE
             loanProductId = ${id}
         )
+      LIMIT ${(page - 1) * limit}, ${limit}
     `);
   }
 
@@ -189,7 +202,8 @@ export class LoanProductController {
   })
   @authenticate('jwt')
   async findRecordInfoCountById(@param.path.number('id') id: number): Promise<any> {
-    return await this.loanProductRepository.dataSource.execute(`
+    let result = [{ count: 0 }]
+    result = await this.loanProductRepository.dataSource.execute(`
       SELECT
         COUNT(DISTINCT(userId)) AS count
       FROM
@@ -197,5 +211,10 @@ export class LoanProductController {
       WHERE
         loanProductId = ${id}
     `);
+
+    if (!result || result.length == 0) {
+      return { count: 0 }
+    }
+    return result[0]
   }
 }
