@@ -170,6 +170,7 @@ export class UserController {
     });
 
     console.log(quickLoginParams);
+    console.log(this.req.ip, this.req.ips);
     if (smsLog == null || smsLog.code != quickLoginParams.code) {
       console.log(smsLog);
       throw new HttpErrors.UnprocessableEntity('验证码错误');
