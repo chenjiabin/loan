@@ -196,7 +196,16 @@ export class UserController {
       user.status = UserStatus.Active;
       user.activeTime = curTs;
       user.createTime = curTs;
-      user.ip = this.req.ip;
+      // user.ip = this.req.ip; // 有点问题，没生效，用下面的
+      let ip = '';
+      let addrsStr = this.req.header('X-Forwarded-For');
+      if (addrsStr) {
+        let addrs = addrsStr.split(',');
+        if (addrs.length > 0) {
+          ip = addrs[0];
+        }
+      }
+      user.ip = ip;
 
       // Save & Return Result
       foundUser = await this.userRepository.create(user);
@@ -268,15 +277,15 @@ export class UserController {
       let curTs = getCurTimestamp();
       user.createTime = curTs;
 
-      // let ip = '';
-      // let addrsStr = this.req.header('X-Forwarded-For');
-      // if (addrsStr) {
-      //   let addrs = addrsStr.split(',');
-      //   if (addrs.length > 0) {
-      //     ip = addrs[0];
-      //   }
-      // }
-      user.ip = this.req.ip;
+      let ip = '';
+      let addrsStr = this.req.header('X-Forwarded-For');
+      if (addrsStr) {
+        let addrs = addrsStr.split(',');
+        if (addrs.length > 0) {
+          ip = addrs[0];
+        }
+      }
+      user.ip = ip;
 
       // Save & Return Result
       foundUser = await this.userRepository.create(user);
