@@ -12,7 +12,7 @@ export async function main(options?: ApplicationConfig) {
   options = {
     rest: {
       expressSettings: {
-        'trust proxy': 'loopback'
+        'trust proxy': true
       }
     }
   }
