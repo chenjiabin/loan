@@ -9,10 +9,17 @@ import { getCurTimestamp } from './utils/utils';
 export { ShoppingApplication, PackageInfo, PackageKey } from './application';
 
 export async function main(options?: ApplicationConfig) {
+  options = {
+    rest: {
+      expressSettings: {
+        'trust proxy': 'loopback'
+      }
+    }
+  }
   const app = new ShoppingApplication(options);
-
   await app.boot();
   await app.start();
+
   // app.models.Todo.definition.rawProperties.createTime.default =
   //   app.models.Todo.definition.properties.createTime.default = function () {
   //     return getCurTimestamp();

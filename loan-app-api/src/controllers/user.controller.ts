@@ -195,6 +195,7 @@ export class UserController {
       user.status = UserStatus.Active;
       user.activeTime = curTs;
       user.createTime = curTs;
+      user.ip = this.req.ip;
 
       // Save & Return Result
       foundUser = await this.userRepository.create(user);
@@ -266,18 +267,15 @@ export class UserController {
       let curTs = getCurTimestamp();
       user.createTime = curTs;
 
-      let ip = '';
-      // if (this.req.ips.length > 0) {
-      //   ip = this.req.ips[0]
+      // let ip = '';
+      // let addrsStr = this.req.header('X-Forwarded-For');
+      // if (addrsStr) {
+      //   let addrs = addrsStr.split(',');
+      //   if (addrs.length > 0) {
+      //     ip = addrs[0];
+      //   }
       // }
-      let addrsStr = this.req.header('X-Forwarded-For');
-      if (addrsStr) {
-        let addrs = addrsStr.split(',');
-        if (addrs.length > 0) {
-          ip = addrs[0];
-        }
-      }
-      user.ip = ip;
+      user.ip = this.req.ip;
 
       // Save & Return Result
       foundUser = await this.userRepository.create(user);
