@@ -67,7 +67,7 @@
     "express": "^4.16.4",
     "isemail": "^3.2.0",
     "jsonwebtoken": "^8.4.0",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.13",
     "loopback-connector-kv-redis": "^3.0.0",
     "loopback-connector-mongodb": "^3.9.2",
     "loopback-connector-mysql": "^5.3.1",
