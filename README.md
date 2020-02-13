@@ -29,7 +29,7 @@
 **QQ:** 765220914
 
 
- [1]: http://hudongwen.cn/admin
- [2]: http://hudongwen.cn/channelAdmin
- [3]: http://hudongwen.cn/h5
+ [1]: http://47.56.138.41/admin
+ [2]: http://47.56.138.41/channelAdmin
+ [3]: http://47.56.138.41/h5
  [4]: http://51gsc.com/app/TGa7
